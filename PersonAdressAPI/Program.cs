@@ -1,5 +1,6 @@
 global using PersonAdressAPI.Services.Pepole;
 global using PersonAdressAPI.JWT_Handeler;
+using PersonAdressAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,13 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddCors();
 builder.Services.AddControllers();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.Configure<Tokens>(builder.Configuration.GetSection("Tokens"));
 
 builder.Services.AddSingleton<IPerson, PepoleService>();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 
 
 var app = builder.Build();

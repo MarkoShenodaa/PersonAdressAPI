@@ -18,10 +18,10 @@ public class JwtHandeler
 
     public async Task Invoke(HttpContext context, IPerson userService)
     {
-        var token = (Person)context.Items["GetPersonByLoginData"];
+        var token =  context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
         if (token != null)
-            attachUserToContext(context, userService, token.GenerateJwtToken());
+            attachUserToContext(context, userService, token);
 
         await _next(context);
     }
@@ -43,7 +43,7 @@ public class JwtHandeler
 
             var jwtToken = (JwtSecurityToken)validatedToken;
             var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
-            context.Items["User"] = await userService.GetModelByID(userId);
+            context.Items["Person"] = await userService.GetModelByID(userId);
         }
         catch
         {

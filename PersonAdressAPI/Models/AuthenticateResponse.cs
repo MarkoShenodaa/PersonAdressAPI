@@ -7,10 +7,9 @@ public class AuthenticateResponse
     public string Token { get; set; }
 
 
-    public AuthenticateResponse(Person user, string token)
+    public AuthenticateResponse(Person user)
     {
         Id = user.Id;
         Name = user.Name;
-        Token = token;
     }
 }

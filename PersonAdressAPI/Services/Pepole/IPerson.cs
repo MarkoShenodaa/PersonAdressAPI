@@ -4,6 +4,8 @@
     {
         Task<List<Person>> GetPersonByName(string name);
 
-        Task<Person> GetPersonByLoginData(string userName, string password);
+        Task<List<Person>> AddLoginToPerson(int personID,AuthenticateRequest request);
+
+        Task<AuthenticateResponse> GetPersonByLoginData(AuthenticateRequest request);
     }
 }

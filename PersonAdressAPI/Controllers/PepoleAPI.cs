@@ -85,18 +85,31 @@ public class PepoleAPIController : ControllerBase
         return Ok(await _aPIService.UpdateModel(person));
     }
 
-    [HttpGet("Login")]
-    public async Task<ActionResult<Person>> GetPersonByLoginData(string username, string password)
+    [Authorize]
+    [HttpPut("AddPersonLogin")]
+    public async Task<ActionResult<List<Person>>> AddPersonLoginAsync(int person,AuthenticateRequest request)
     {
-        if (string.IsNullOrEmpty(username)) return BadRequest("Username can't be empty");
+        if (person == null) return BadRequest("Can't find person data.");
 
-        if (string.IsNullOrEmpty(password)) return BadRequest("Password can't be empty");
+        if (string.IsNullOrEmpty(request.UserName)) return BadRequest("Username Can't be Empty.");
 
-        var person = await _aPIService.GetPersonByLoginData(username, password);
+        if (string.IsNullOrEmpty(request.Password)) return BadRequest("Password Can't be Empty.");
+
+        return Ok(await _aPIService.AddLoginToPerson(person,request));
+    }
+
+    [HttpGet("Login")]
+    public async Task<ActionResult<AuthenticateResponse>> GetPersonByLoginData(AuthenticateRequest logIn)
+    {
+        if (string.IsNullOrEmpty(logIn.UserName)) return BadRequest("Username can't be empty");
+
+        if (string.IsNullOrEmpty(logIn.Password)) return BadRequest("Password can't be empty");
+
+        var person = await _aPIService.GetPersonByLoginData(logIn);
 
         if (person != null)
         {
-            return Ok(person.GenerateJwtToken());
+            return Ok(person);
         }
 
         return BadRequest("Username or Password is wrong try agin!");
